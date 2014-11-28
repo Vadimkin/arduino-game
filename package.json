@@ -1,0 +1,27 @@
+{
+  "name": "arduino-game",
+  "description": "Game on Node.JS, using photoresistor at Arduino",
+  "version": "0.0.0001",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "arduino",
+    "game",
+    "photoresistor"
+  ],
+  "author": {
+    "name": "Vadim Klimenko"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Vadimkin/arduino-game.git"
+  },
+  "bugs": "http://github.com/Vadimkin/arduino-game/issues",
+  "license": "CC-BY-SA",
+  "dependencies": {
+    "express": "^4.10.4",
+    "firmata": "^0.3.6",
+    "socket.io": "^1.2.1"
+  }
+}
