@@ -31,8 +31,6 @@
 	var maxValue = -1;
 	var minValue = -1;
 
-	var history = [0, 0, 0];
-
 	$(document).ready(function() {
 		socket.on('analogValue', (function(data) {
 			if(maxValue < data) {
@@ -44,55 +42,12 @@
 
 			var marTop = (100 * (data - minValue))/(maxValue - minValue);
 
-			if(history[0] == 0 && !isNaN(marTop)) {
-				for(var i = 0; i < history.length; i++) {
-					history[i] = marTop;
-				}
-			}
-
-			history.push(marTop);
-			history.shift();
-
-			marTop = 0;
-
-			for(var i = 0; i < history.length; i++) {
-				marTop += history[i];
-			}
-
-			marTop = marTop/history.length;
-
 			$('.info').css({'top': marTop + '%'});
 
 			$('h1').html(marTop);
 		}));
 	});
 
-	function onAnalogValue(data) {
-		if(maxValue < data) {
-			maxValue = data;
-		}
-		if(minValue == -1 || minValue > data) {
-			minValue = data;
-		}
-
-		var marTop = (100 * (data - minValue))/(maxValue - minValue);
-		history.push(marTop);
-		history.pop();
-
-		console.log(history);
-
-		marTop = 0;
-
-		for(var i = 0; i < history.length; i++) {
-			marTop += history[i];
-		}
-
-		marTop = marTop/history.length;
-
-		$('.info').css({'top': marTop + '%'});
-
-		$('h1').html(marTop);
-	};
 	</script>
 	</body>
 </html>

@@ -29,9 +29,8 @@ board.on("ready", function() {
 });
 
 io.on('connection', function (socket) {
-
 	setInterval(function() {
-		// console.log(photoresistorValue);
+		console.log(photoresistorValue);
 		socket.broadcast.emit('analogValue', photoresistorValue);
 	}, 100);
 });
