@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<title>Hello world</title>
+		<meta name="viewport" content="width=device-width, minimal-ui" />
 	</head>
 	<body>
 
@@ -26,7 +27,7 @@
 	<h1>ALL OK</h1>
 
 	<script>
-	var socket = io.connect('http://127.0.0.1');
+	var socket = io.connect();
 
 	var maxValue = -1;
 	var minValue = -1;
@@ -36,7 +37,7 @@
 			if(maxValue < data) {
 				maxValue = data;
 			}
-			if(minValue == -1 || minValue > data) {
+			if((minValue == -1 || minValue > data) && data != 0) {
 				minValue = data;
 			}
 
@@ -46,6 +47,11 @@
 
 			$('h1').html(marTop);
 		}));
+
+		socket.on('disconnect', function() {
+			maxValue = -1;
+			minValue = -1;
+        });
 	});
 
 	</script>
