@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Airplane Game</title>
+        <link rel="stylesheet" href="game.css">
+    </head>
+    <body>
+    	
+    	<canvas id="canvasBg" width="800" height="490" ></canvas>
+    	<canvas id="canvasEnemy" width="800" height="500" ></canvas>
+    	<canvas id="canvasJet" width="800" height="500" ></canvas>
+        <canvas id="canvasHud" width="800" height="500" ></canvas>
+
+        <script src="/socket.io/socket.io.js"></script>
+
+        <script>
+            var socket = io.connect();
+
+            var maxValue = -1;
+            var minValue = -1;
+
+            var valResistor = 0;
+
+            socket.on('analogValue', (function(data) {
+                if(maxValue < data) {
+                    maxValue = data;
+                }
+                if((minValue == -1 || minValue > data) && data != 0) {
+                    minValue = data;
+                }
+
+                var marTop = (100 * (data - minValue))/(maxValue - minValue);
+
+                valResistor = marTop;
+            }));
+
+            socket.on('disconnect', function() {
+                maxValue = -1;
+                minValue = -1;
+            });
+        </script>
+
+        <script src="game.js"></script>
+        
+    </body>
+</html>
