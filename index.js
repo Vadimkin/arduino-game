@@ -6,32 +6,26 @@ var io = require('socket.io')(server);
 
 app.use(express.static('public'));
 
-var board = new Board("/dev/tty.usbmodem1411");
+var board = new Board("/dev/tty.usbmodem1421");
 
-var photoresistorValue = 0;
+var photoresistorFirstValue = 0;
+var photoresistorSecondValue = 0;
 
 board.on("ready", function() {
 	var photoresistorPin = 0;
-	var ledPin = 13;
-
-	board.pinMode(ledPin, board.MODES.OUTPUT);
-	board.digitalWrite(ledPin, board.LOW);
 	
 	board.analogRead(0,function(val) {
-		if(val < 400) {
-			board.digitalWrite(ledPin, board.HIGH);
-		} else {
-			board.digitalWrite(ledPin, board.LOW);
-		};
-
-		photoresistorValue = val;
+		photoresistorFirstValue = val;
+	})
+	board.analogRead(1,function(val) {
+		photoresistorSecondValue = val;
 	})
 });
 
 io.on('connection', function (socket) {
 	setInterval(function() {
-		console.log(photoresistorValue);
-		io.emit('analogValue', photoresistorValue);
+		io.emit('analogFirstValue', photoresistorFirstValue);
+		io.emit('analogSecondValue', photoresistorSecondValue);
 	}, 100);
 });
 
