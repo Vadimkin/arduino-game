@@ -9,48 +9,68 @@
 	<style>
 		.info {
 			/*transition: all 0.01s ease, background-position 1ms;*/
-			width: 100%;
+			width: 50%;
 			height: 1px;
 			background: #000;
 			position: absolute;
-			top: 100%;
+			/*top: 100%;*/
 			left: 0;
 		}
+			.info__2 {
+				left: 50%;
+			}
 	</style>
 		
 		
 	<script src="/jquery-1.11.0.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 
-	<div class="info"></div>
-	
-	<h1>ALL OK</h1>
+	<div class="info info__1"></div>
+	<div class="info info__2"></div>
+
 
 	<script>
 	var socket = io.connect();
 
-	var maxValue = -1;
-	var minValue = -1;
+	var maxFirstValue = -1;
+	var minFirstValue = -1;
+
+	var maxSecondValue = -1;
+	var minSecondValue = -1;
 
 	$(document).ready(function() {
-		socket.on('analogValue', (function(data) {
-			if(maxValue < data) {
-				maxValue = data;
+		socket.on('analogFirstValue', (function(data) {
+			if(maxFirstValue < data || maxFirstValue <= 0) {
+				maxFirstValue = data;
 			}
-			if((minValue == -1 || minValue > data) && data != 0) {
-				minValue = data;
+			if((minFirstValue == -1 || minFirstValue > data) && data != 0) {
+				minFirstValue = data;
 			}
 
-			var marTop = (100 * (data - minValue))/(maxValue - minValue);
+			var marTop = 100 - (100 * (data - minFirstValue))/(maxFirstValue - minFirstValue);
 
-			$('.info').css({'top': marTop + '%'});
+			$('.info__1').css({'top': marTop + '%'});
+		}));
 
-			$('h1').html(marTop);
+		socket.on('analogSecondValue', (function(data) {
+			if(maxSecondValue < data) {
+				maxSecondValue = data;
+			}
+			if((minSecondValue == -1 || minSecondValue > data) && data != 0) {
+				minSecondValue = data;
+			}
+
+			var marTop = 100 - (100 * (data - minSecondValue))/(maxSecondValue - minSecondValue);
+
+			$('.info__2').css({'top': marTop + '%'});
 		}));
 
 		socket.on('disconnect', function() {
-			maxValue = -1;
-			minValue = -1;
+			maxFirstValue = -1;
+			minFirstValue = -1;
+
+			maxSecondValue = -1;
+			minSecondValue = -1;
         });
 	});
 
