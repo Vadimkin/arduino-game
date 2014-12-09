@@ -6,7 +6,7 @@ var io = require('socket.io')(server);
 
 app.use(express.static('public'));
 
-var board = new Board("/dev/tty.usbmodem1421");
+var board = new Board("/dev/tty.usbmodem1411");
 
 var photoresistorFirstValue = 0;
 var photoresistorSecondValue = 0;
